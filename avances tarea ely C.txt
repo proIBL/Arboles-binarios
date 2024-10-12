@@ -1,0 +1,115 @@
+/******************************************************************************
+
+                            Online C Compiler.
+                Code, Compile, Run and Debug C program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+struct Nodo {
+    int dato;
+    struct Nodo *izquierda;
+    struct Nodo *derecha;
+};
+
+struct Nodo *nuevoNodo(int dato){
+    struct Nodo *nodo = (struct Nodo *) malloc(sizeof(struct Nodo));
+    nodo->dato = dato;
+    nodo->izquierda = nodo->derecha = NULL;
+    return nodo;
+}
+
+void insertarNodo(struct Nodo *nodo_padre,struct Nodo *nodo_hijo, int direccion){
+    // 1 izquierda
+    // 2 derecha
+    if(direccion == 1)
+        nodo_padre->izquierda = nodo_hijo;
+    else if(direccion == 2)
+        nodo_padre->derecha = nodo_hijo;
+}
+
+int menu(){
+    int opcion;
+    printf("1 Insertar un nuevo valor\n");
+    printf("2 Buscar dato en árbol\n");
+    printf("3 Imprimir todos los datos\n");
+    printf("4 Salir\n");
+    scanf("%i", &opcion);
+    if (opcion >= 1 && opcion <= 4)
+        return opcion;
+    else{
+        printf("Opcion no valida\n");
+        while (getchar() != '\n');
+        menu();
+    }
+
+}
+
+int numero_del_1_al_100(){
+    float numero;
+    printf("Dame un numero del 1 al 100");
+    while (getchar() != '\n');
+    scanf("%f",numero);
+    if (opcion >= 1 && opcion <= 100)
+        return opcion;
+    else{
+        printf("Opcion no valida\n");
+        while (getchar() != '\n');
+        numero_del_1_al_100();
+    }
+
+}
+
+int direccion(){
+    //1 izquierda
+    //2 derecha
+    int direccion;
+    printf("Colocado a la izquierda o derecha?");
+    while (getchar() != '\n');
+    scanf("%i",direccion);
+    if (direccion == 1 || direccion == 2)
+        return direccion;
+    else{
+        printf("Opcion no valida\n");
+        while (getchar() != '\n');
+        numero_del_1_al_100();
+    }
+
+}
+
+int main()
+{
+    struct Nodo *nodo  = nuevoNodo(NULL);
+    float numero;
+    
+    while(1){    
+        switch(menu()){
+            case 1:
+                numero = numero_del_1_al_100()
+                
+                struct Nodo *nuevo_nodo = nuevoNodo(numero);
+                if (nodo == NULL)
+                    nodo = nuevo_nodo;
+                else{
+                    insertarNodo(nodo,nuevo_nodo,);
+                }
+                
+                
+                    
+                printf("opcion 1");
+                break;
+            case 2:
+                printf("opcion 2");
+                break;
+            case 3:
+                printf("opcion 3");
+                break;
+            case 4:
+                exit(0);
+        }
+        printf("\n");
+    }
+}
