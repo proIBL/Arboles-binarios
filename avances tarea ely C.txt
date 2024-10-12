@@ -9,6 +9,7 @@ Write your code in this editor and press "Run" button to compile and execute it.
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
+
 struct Nodo {
     int dato;
     struct Nodo *izquierda;
@@ -22,13 +23,48 @@ struct Nodo *nuevoNodo(int dato){
     return nodo;
 }
 
-void insertarNodo(struct Nodo *nodo_padre,struct Nodo *nodo_hijo, int direccion){
+int set_direction(){
+    //1 izquierda
+    //2 derecha
+    int direccion;
+    printf("Colocado a la izquierda o derecha?\n");
+    printf("1 izquierda\n");
+    printf("2 derecha\n");
+    scanf("%i",&direccion);
+    while (getchar() != '\n');
+    if (direccion == 1 || direccion == 2)
+        return direccion;
+    else{
+        printf("Opcion no valida\n");
+        set_direction();
+    }
+}
+
+int nodo_lleno(struct Nodo *nodo){
+    if (nodo != NULL)
+        return 1;
+    else
+        return 0;
+}
+
+void insertarNodo(struct Nodo *nodo_padre,struct Nodo *nodo_hijo){
     // 1 izquierda
     // 2 derecha
-    if(direccion == 1)
-        nodo_padre->izquierda = nodo_hijo;
-    else if(direccion == 2)
-        nodo_padre->derecha = nodo_hijo;
+    int direccion = set_direction();
+    if(direccion == 1){
+        if (nodo_lleno(nodo_padre->izquierda)){
+            insertarNodo(nodo_padre->izquierda,nodo_hijo);
+        }
+        else
+            nodo_padre->izquierda = nodo_hijo;
+    }
+    else if(direccion == 2){
+        if (nodo_lleno(nodo_padre->derecha)){
+            insertarNodo(nodo_padre->derecha,nodo_hijo);
+        }
+        else
+            nodo_padre->derecha = nodo_hijo;
+    }
 }
 
 int menu(){
@@ -38,74 +74,76 @@ int menu(){
     printf("3 Imprimir todos los datos\n");
     printf("4 Salir\n");
     scanf("%i", &opcion);
+    while (getchar() != '\n');
     if (opcion >= 1 && opcion <= 4)
         return opcion;
     else{
         printf("Opcion no valida\n");
-        while (getchar() != '\n');
         menu();
     }
-
 }
 
 int numero_del_1_al_100(){
     float numero;
-    printf("Dame un numero del 1 al 100");
+    printf("Dame un numero del 1 al 100\n");
+    scanf("%f",&numero);
     while (getchar() != '\n');
-    scanf("%f",numero);
-    if (opcion >= 1 && opcion <= 100)
-        return opcion;
+    if (numero >= 1 && numero <= 100)
+        return numero;
     else{
         printf("Opcion no valida\n");
-        while (getchar() != '\n');
         numero_del_1_al_100();
     }
 
 }
 
-int direccion(){
-    //1 izquierda
-    //2 derecha
-    int direccion;
-    printf("Colocado a la izquierda o derecha?");
-    while (getchar() != '\n');
-    scanf("%i",direccion);
-    if (direccion == 1 || direccion == 2)
-        return direccion;
-    else{
-        printf("Opcion no valida\n");
-        while (getchar() != '\n');
-        numero_del_1_al_100();
+void buscar_inorden(struct Nodo *nodo, float valor_buscado, int *encontrado) {
+    if (nodo != NULL && !(*encontrado)) {
+        buscar_inorden(nodo->izquierda,valor_buscado, encontrado);
+        if (nodo->dato == valor_buscado){
+            printf("Encontrado\n");
+            *encontrado = 1;
+            return;
+        }
+        buscar_inorden(nodo->derecha, valor_buscado, encontrado);
     }
+}
 
+void inorden(struct Nodo *nodo) {
+    if (nodo != NULL) {
+        inorden(nodo->izquierda);
+        printf("%d ", nodo->dato);
+        inorden(nodo->derecha);
+    }
 }
 
 int main()
 {
-    struct Nodo *nodo  = nuevoNodo(NULL);
+    struct Nodo *nodo_raiz;
     float numero;
-    
+    int encontrado = 0;
     while(1){    
         switch(menu()){
             case 1:
-                numero = numero_del_1_al_100()
-                
+                numero = numero_del_1_al_100();
                 struct Nodo *nuevo_nodo = nuevoNodo(numero);
-                if (nodo == NULL)
-                    nodo = nuevo_nodo;
+                if (nodo_raiz == NULL)
+                    nodo_raiz = nuevo_nodo;
                 else{
-                    insertarNodo(nodo,nuevo_nodo,);
+                    insertarNodo(nodo_raiz, nuevo_nodo);
                 }
-                
-                
-                    
-                printf("opcion 1");
+                printf("Inserción exitosa\n");
                 break;
             case 2:
-                printf("opcion 2");
+                numero = numero_del_1_al_100();
+                buscar_inorden(nodo_raiz, numero, &encontrado);
+                if (!encontrado)
+                    printf("No encontrado\n");
+                encontrado = 0;
                 break;
             case 3:
-                printf("opcion 3");
+                printf("Recorrido inorden: ");
+                inorden(nodo_raiz);
                 break;
             case 4:
                 exit(0);
